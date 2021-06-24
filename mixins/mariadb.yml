@@ -175,6 +175,8 @@ actions:
         if (!${@n.ismaster}):
           cmd[${@n.id}]: |- 
             jem service restart
+            sleep 5
+            service mysql status
             if [ $? -ne 0 ]; then
               echo "restart failed, start mysql anyway"
               sudo service mysql start
