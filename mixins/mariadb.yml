@@ -173,8 +173,18 @@ actions:
       user: root
     - forEach(n:nodes.sqldb):
         if (!${@n.ismaster}):
-          cmd[${@n.id}]: "jem service restart"
-
+          cmd[${@n.id}]: |- 
+            jem service restart
+            if [ $? -ne 0 ]; then
+              echo "restart failed, start mysql anyway"
+              sudo service mysql start
+              exit 0
+            else
+              echo "jem restart was ok here !!"
+              exit 0
+            fi
+            echo "this should not be echoed"
+            exit 0
   setupInstance:
     - cmd[${this.id}]: |-
         sed -i "s/server_id.*/server_id = $(echo '${env.region}' | md5sum | grep -Eo "[[:digit:]]{3}" | head -n1)/" /etc/mysql/conf.d/galera.cnf
