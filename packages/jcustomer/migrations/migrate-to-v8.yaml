@@ -105,8 +105,8 @@ actions:
         role_id=$(curl $VAULT_CURL_APPROLE/role-id | jq -r '.data.role_id')
 
         # Delete lost secretid
-        old_secret_id_accessor=$(curl $VAULT_CURL_APPROLE/secret-id -XLIST | jq -r '.data.keys[0])
-        curl $VAULT_CURL_APPROLE/secret-id/destroy -XPOST -d '{"secret_id_accessor":"$old_secret_id_accessor"}'
+        old_secret_id_accessor=$(curl $VAULT_CURL_APPROLE/secret-id -XLIST | jq -r '.data.keys[0]')
+        curl $VAULT_CURL_APPROLE/secret-id-accessor/destroy -XPOST -d "{\"secret_id_accessor\":\"$old_secret_id_accessor\"}"
 
         # Create and fetch new secret id
         secret_id=$(curl $VAULT_CURL_APPROLE/secret-id -XPOST | jq -r .data.secret_id)
@@ -139,7 +139,7 @@ actions:
     - log: Store vault creds in env vars
     - env.control.AddContainerEnvVars[cp,es]:
       vars: {
-        "VAULT_CLUSTER_URL": "${settings.vault_cluster_url}",
+        "VAULT_CLUSTER_URL": "https://${settings.vault_cluster_url}",
         "VAULT_SECRET_ID": "${globals.secret_id}",
         "VAULT_ROLE_ID": "${globals.role_id}"
       }
