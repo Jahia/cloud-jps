@@ -42,6 +42,9 @@ onInstall:
   # Restart actions:
   - jahiaRollingRestart                            # needed for PAAS-1722
 
+  # Needs to be performed only once PAAS-1722 is applied
+  - setGaleraMaster                                # PAAS-1723
+
   ### Post-actions
   - setEnvVersion: ${globals.version}
   - logEvent:
@@ -87,3 +90,7 @@ actions:
   jahiaRollingRestart:
     - install:
         jps: "${globals.repoRootUrl}/packages/jahia/jahia-rolling-restart.yml"
+
+  setGaleraMaster:
+    proxysqlSwitchMaster:
+      target: 3
