@@ -89,7 +89,7 @@ actions:
 
   setupVaultAccount:
     - log: Generate vault credentials
-    - cmd[${ndoes.cp.first.id}]: |-
+    - cmd[${nodes.cp.first.id}]: |-
         PAPI_HOSTNAME="${settings.papi_hostname}"
         PAPI_TOKEN="${settings.papi_token}"
         VAULT_CLUSTER_URL="${settings.vault_cluster_url}"
